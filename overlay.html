@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlay Défi - Paliers de Don</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: transparent;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .overlay-container {
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .milestones-box {
+            background: rgba(57, 255, 20, 0.15);
+            border: 2px solid #00ff00;
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 255, 0, 0.2);
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00ff00;
+            margin-bottom: 25px;
+            text-align: left;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .milestones-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .milestone:last-child {
+            border-bottom: none;
+        }
+
+        .milestone:hover {
+            transform: translateX(5px);
+            padding-left: 5px;
+        }
+
+        .milestone-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ff00;
+            min-width: 100px;
+            flex-shrink: 0;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+        }
+
+        .milestone-description {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #ffffff;
+            flex: 1;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 768px) {
+            .overlay-container {
+                padding: 20px;
+            }
+
+            .milestones-box {
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .milestone-amount {
+                font-size: 1.1rem;
+                min-width: 80px;
+            }
+
+            .milestone-description {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay-container">
+        <div class="milestones-box">
+            <h1 class="title">🎯 Paliers de la Barre de Donation 🎯</h1>
+            <div class="milestones-list" id="milestonesList">
+                <!-- Les paliers seront générés dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const milestones = [
+            { amount: 50, description: "Marche incliné pdt 10 mn" },
+            { amount: 100, description: "Live IRL je vais nager à la mer" },
+            { amount: 500, description: "J'invite doudou à la villa pour me coach + émission à la villa" },
+            { amount: 1000, description: "1h de piscine" },
+            { amount: 1500, description: "PioPio me coach en live" },
+            { amount: 2000, description: "Session Veronique Et Davina" },
+            { amount: 2500, description: "Je fais le clip call on me" },
+            { amount: 4500, description: "Live Tennis ou Paddle ft. Ahmed & Teuf" },
+            { amount: 10000, description: "Initiation box thai ou MMA JJB" },
+            { amount: 50000, description: "J'invite Manu Ploquin dans un coin à pisse et on fait de l'hyrox" }
+        ];
+
+        function initMilestones() {
+            const container = document.getElementById('milestonesList');
+            container.innerHTML = '';
+            
+            milestones.forEach((milestone) => {
+                const div = document.createElement('div');
+                div.className = 'milestone';
+                
+                div.innerHTML = `
+                    <div class="milestone-amount">${milestone.amount.toLocaleString('fr-FR')}€</div>
+                    <div class="milestone-description">${milestone.description}</div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        // Initialisation
+        initMilestones();
+    </script>
+</body>
+</html>
