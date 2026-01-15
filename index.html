@@ -30,15 +30,30 @@
         }
 
         .milestones-box {
-            background: rgb(28, 41, 58);
+            background: linear-gradient(135deg, rgba(15, 23, 35, 0.95) 0%, rgba(28, 41, 58, 0.95) 50%, rgba(20, 30, 45, 0.95) 100%);
             border: 2px solid rgb(220, 60, 77);
             border-radius: 16px;
             padding: 12px 16px;
             backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        0 0 20px rgba(220, 60, 77, 0.15);
             max-width: 580px;
             width: 100%;
             overflow: visible;
+            position: relative;
+        }
+
+        .milestones-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            background: radial-gradient(circle at top left, rgba(220, 60, 77, 0.08) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .title {
@@ -49,17 +64,21 @@
             text-align: center;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
             letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
         }
 
         .milestones-list {
             display: flex;
             flex-direction: column;
             gap: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .milestone {
             display: grid;
-            grid-template-columns: 95px 1fr;
+            grid-template-columns: 120px 1fr;
             gap: 16px;
             padding: 8px 10px;
             background: transparent;
@@ -81,6 +100,7 @@
             align-items: center;
             justify-content: center;
             align-self: stretch;
+            text-align: center;
         }
 
         .milestone-description {
@@ -109,7 +129,7 @@
             }
 
             .milestone {
-                grid-template-columns: 80px 1fr;
+                grid-template-columns: 100px 1fr;
                 gap: 14px;
                 padding: 7px 8px;
             }
@@ -127,7 +147,7 @@
 <body>
     <div class="overlay-container">
         <div class="milestones-box">
-            <h1 class="title">Paliers de donations</h1>
+            <h1 class="title">DONATIONS GOALS</h1>
             <div class="milestones-list" id="milestonesList">
                 <!-- Les paliers seront générés dynamiquement -->
             </div>
@@ -137,12 +157,12 @@
     <script>
         const milestones = [
             { amount: 50, description: "10 minutes de marche en inclinaison" },
-            { amount: 100, description: "Live IRL — je vais nager dans la mer" },
+            { amount: 100, description: "Live IRL : je vais nager dans la mer" },
             { amount: 500, description: "J'invite Doudou à la villa pour me coacher + émission spéciale à la villa" },
             { amount: 1000, description: "1 heure de piscine" },
             { amount: 1500, description: "PioPio me coach en live" },
             { amount: 2000, description: "Session Véronique & Davina (aérobic légendaire)" },
-            { amount: 2500, description: "Je refais le clip Call On Me" },
+            { amount: 2500, description: "Je refais le clip \"Call On Me\"" },
             { amount: 4500, description: "Live tennis ou paddle ft. Ahmed & Teuf" },
             { amount: 5000, description: "Interview de DMG pour son grand COME BACK" },
             { amount: 7500, description: "Marathon 10 km" },
@@ -155,12 +175,17 @@
             const container = document.getElementById('milestonesList');
             container.innerHTML = '';
             
-            milestones.forEach((milestone) => {
+            milestones.forEach((milestone, index) => {
                 const div = document.createElement('div');
                 div.className = 'milestone';
                 
+                // Pour le premier palier (50€), afficher "Tous les 50€"
+                const amountDisplay = index === 0 
+                    ? `Tous les ${milestone.amount.toLocaleString('fr-FR')}€`
+                    : `${milestone.amount.toLocaleString('fr-FR')}€`;
+                
                 div.innerHTML = `
-                    <div class="milestone-amount">${milestone.amount.toLocaleString('fr-FR')}€</div>
+                    <div class="milestone-amount">${amountDisplay}</div>
                     <div class="milestone-description">${milestone.description}</div>
                 `;
                 
