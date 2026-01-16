@@ -136,6 +136,67 @@
             display: flex;
             align-items: center;
             padding: 8px 0;
+            gap: 12px;
+        }
+
+        /* État : Atteint mais non réalisé */
+        .milestone.status-reached {
+            opacity: 0.9;
+        }
+
+        .milestone.status-reached .milestone-amount {
+            background: rgba(255, 152, 0, 0.2);
+            border: 2px solid rgba(255, 152, 0, 0.7);
+            color: rgb(255, 183, 77);
+        }
+
+        .milestone.status-reached .milestone-description {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* État : Atteint et réalisé */
+        .milestone.status-completed {
+            opacity: 0.8;
+        }
+
+        .milestone.status-completed .milestone-amount {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.6);
+            color: rgb(129, 199, 132);
+        }
+
+        .milestone.status-completed .milestone-description {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .milestone-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgb(76, 175, 80);
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+        }
+
+        .milestone-warning {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid rgba(255, 152, 0, 0.6);
+            border-radius: 6px;
+            color: rgb(255, 183, 77);
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
         }
 
         .donate-button-container {
@@ -258,19 +319,19 @@
 
     <script>
         const milestones = [
-            { amount: 50, description: "5 Squats" },
-            { amount: 100, description: "Live IRL : je vais nager dans la mer" },
-            { amount: 500, description: "J'invite Doudou à la villa pour me coacher + émission spéciale à la villa" },
-            { amount: 1000, description: "1 heure de piscine" },
-            { amount: 1500, description: "PioPio me coach en live" },
-            { amount: 2000, description: "Session Véronique & Davina (aérobic légendaire)" },
-            { amount: 2500, description: "Je refais le clip \"Call On Me\"" },
-            { amount: 4500, description: "Live tennis ou paddle ft. Ahmed & Teuf" },
-            { amount: 5000, description: "Interview de DMG pour son grand COME BACK" },
-            { amount: 7500, description: "Marathon 10 km" },
-            { amount: 10000, description: "Initiation boxe thaï ou MMA / JJB" },
-            { amount: 50000, description: "J'invite Manu Ploquin dans un coin à pisse et on fait de l'Hyrox" },
-            { amount: 100000, description: "J'invite COCACHERRY et ANGE à la villa" }
+            { amount: 50, description: "5 Squats", status: 'pending' },
+            { amount: 100, description: "Live IRL : je vais nager dans la mer", status: 'reached' },
+            { amount: 500, description: "J'invite Doudou à la villa pour me coacher + émission spéciale à la villa", status: 'pending' },
+            { amount: 1000, description: "1 heure de piscine", status: 'pending' },
+            { amount: 1500, description: "PioPio me coach en live", status: 'pending' },
+            { amount: 2000, description: "Session Véronique & Davina (aérobic légendaire)", status: 'pending' },
+            { amount: 2500, description: "Je refais le clip \"Call On Me\"", status: 'pending' },
+            { amount: 4500, description: "Live tennis ou paddle ft. Ahmed & Teuf", status: 'pending' },
+            { amount: 5000, description: "Interview de DMG pour son grand COME BACK", status: 'pending' },
+            { amount: 7500, description: "Marathon 10 km", status: 'pending' },
+            { amount: 10000, description: "Initiation boxe thaï ou MMA / JJB", status: 'pending' },
+            { amount: 50000, description: "J'invite Manu Ploquin dans un coin à pisse et on fait de l'Hyrox", status: 'pending' },
+            { amount: 100000, description: "J'invite COCACHERRY et ANGE à la villa", status: 'pending' }
         ];
 
         function initMilestones() {
@@ -279,16 +340,25 @@
             
             milestones.forEach((milestone, index) => {
                 const div = document.createElement('div');
-                div.className = 'milestone';
+                // Ajouter la classe selon le statut : 'pending', 'reached', ou 'completed'
+                div.className = 'milestone status-' + milestone.status;
                 
                 // Pour le premier palier (50€), afficher "Tous les 50€"
                 const amountDisplay = index === 0 
                     ? `Tous les ${milestone.amount.toLocaleString('fr-FR')}€`
                     : `${milestone.amount.toLocaleString('fr-FR')}€`;
                 
+                // Ajouter un indicateur selon le statut
+                let indicator = '';
+                if (milestone.status === 'reached') {
+                    indicator = '<span class="milestone-warning">À réaliser</span>';
+                } else if (milestone.status === 'completed') {
+                    indicator = '<span class="milestone-check">✓</span>';
+                }
+                
                 div.innerHTML = `
                     <div class="milestone-amount">${amountDisplay}</div>
-                    <div class="milestone-description">${milestone.description}</div>
+                    <div class="milestone-description"><span>${milestone.description}</span>${indicator}</div>
                 `;
                 
                 container.appendChild(div);
