@@ -85,6 +85,28 @@
             z-index: 1;
         }
 
+        .category-section {
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: rgb(255, 255, 255);
+            margin-bottom: 16px;
+            text-align: left;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            letter-spacing: 0.3px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(220, 60, 77, 0.5);
+        }
+
         .milestones-list {
             display: flex;
             flex-direction: column;
@@ -263,6 +285,15 @@
                 margin-bottom: 20px;
             }
 
+            .category-section {
+                margin-bottom: 24px;
+            }
+
+            .category-title {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+
             .milestone {
                 grid-template-columns: 110px 1fr;
                 gap: 16px;
@@ -306,8 +337,17 @@
         </div>
 
         <div class="milestones-box">
-            <div class="milestones-list" id="milestonesList">
-                <!-- Les paliers seront générés dynamiquement -->
+            <div class="category-section">
+                <div class="category-title">💰 Dons uniques</div>
+                <div class="milestones-list" id="uniqueDonationsList">
+                    <!-- Les dons uniques seront générés dynamiquement -->
+                </div>
+            </div>
+            <div class="category-section">
+                <div class="category-title">🎯 Donations Goals Paliers</div>
+                <div class="milestones-list" id="goalsMilestonesList">
+                    <!-- Les paliers de donations goals seront générés dynamiquement -->
+                </div>
             </div>
             <div class="donate-button-container">
                 <a href="https://streamlabs.com/theryu7z/tip" target="_blank" rel="noopener noreferrer" class="donate-button">
@@ -318,9 +358,15 @@
     </div>
 
     <script>
-        const milestones = [
-            { amount: 50, description: "5 Squats", status: 'pending' },
-            { amount: 100, description: "Live IRL : je vais nager dans la mer", status: 'reached' },
+        const uniqueDonations = [
+            { amount: 5, description: "5 jumping jacks", status: 'pending' },
+            { amount: 20, description: "30s de planche", status: 'pending' },
+            { amount: 50, description: "10 squats", status: 'pending' },
+            { amount: 100, description: "20 jumping jacks", status: 'pending' },
+            { amount: 200, description: "1 minute de planche", status: 'pending' }
+        ];
+
+        const goalsMilestones = [
             { amount: 500, description: "J'invite Doudou à la villa pour me coacher + émission spéciale à la villa", status: 'pending' },
             { amount: 1000, description: "1 heure de piscine", status: 'pending' },
             { amount: 1500, description: "PioPio me coach en live", status: 'pending' },
@@ -334,34 +380,47 @@
             { amount: 100000, description: "J'invite COCACHERRY et ANGE à la villa", status: 'pending' }
         ];
 
-        function initMilestones() {
-            const container = document.getElementById('milestonesList');
-            container.innerHTML = '';
+        function createMilestoneElement(milestone, isUnique = false) {
+            const div = document.createElement('div');
+            // Ajouter la classe selon le statut : 'pending', 'reached', ou 'completed'
+            div.className = 'milestone status-' + milestone.status;
             
-            milestones.forEach((milestone, index) => {
-                const div = document.createElement('div');
-                // Ajouter la classe selon le statut : 'pending', 'reached', ou 'completed'
-                div.className = 'milestone status-' + milestone.status;
-                
-                // Pour le premier palier (50€), afficher "Tous les 50€"
-                const amountDisplay = index === 0 
-                    ? `Tous les ${milestone.amount.toLocaleString('fr-FR')}€`
-                    : `${milestone.amount.toLocaleString('fr-FR')}€`;
-                
-                // Ajouter un indicateur selon le statut
-                let indicator = '';
-                if (milestone.status === 'reached') {
-                    indicator = '<span class="milestone-warning">À réaliser</span>';
-                } else if (milestone.status === 'completed') {
-                    indicator = '<span class="milestone-check">✓</span>';
-                }
-                
-                div.innerHTML = `
-                    <div class="milestone-amount">${amountDisplay}</div>
-                    <div class="milestone-description"><span>${milestone.description}</span>${indicator}</div>
-                `;
-                
-                container.appendChild(div);
+            // Afficher le montant formaté
+            const amountDisplay = `${milestone.amount.toLocaleString('fr-FR')}€`;
+            
+            // Ajouter un indicateur selon le statut
+            let indicator = '';
+            if (milestone.status === 'reached') {
+                indicator = '<span class="milestone-warning">À réaliser</span>';
+            } else if (milestone.status === 'completed') {
+                indicator = '<span class="milestone-check">✓</span>';
+            }
+            
+            div.innerHTML = `
+                <div class="milestone-amount">${amountDisplay}</div>
+                <div class="milestone-description"><span>${milestone.description}</span>${indicator}</div>
+            `;
+            
+            return div;
+        }
+
+        function initMilestones() {
+            const uniqueContainer = document.getElementById('uniqueDonationsList');
+            const goalsContainer = document.getElementById('goalsMilestonesList');
+            
+            uniqueContainer.innerHTML = '';
+            goalsContainer.innerHTML = '';
+            
+            // Afficher les dons uniques
+            uniqueDonations.forEach((milestone) => {
+                const div = createMilestoneElement(milestone, true);
+                uniqueContainer.appendChild(div);
+            });
+            
+            // Afficher les paliers de donations goals
+            goalsMilestones.forEach((milestone) => {
+                const div = createMilestoneElement(milestone, false);
+                goalsContainer.appendChild(div);
             });
         }
 
